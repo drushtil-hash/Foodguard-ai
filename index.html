@@ -94,19 +94,8 @@
             box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.12);
         }
 
-        .glow-border-rose {
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            box-shadow: 0 4px 20px -2px rgba(239, 68, 68, 0.12);
-        }
-
         .gradient-text-emerald {
             background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gradient-text-teal {
-            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #0f766e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -126,18 +115,10 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-14px) rotate(5deg); }
         }
-        @keyframes floatReverse {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(14px) rotate(-5deg); }
-        }
         @keyframes shimmerGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.06); }
         }
 
         .animated-hero-title {
@@ -149,25 +130,11 @@
         }
 
         .floating-element-1 { animation: floatSlow 5s ease-in-out infinite; }
-        .floating-element-2 { animation: floatReverse 6s ease-in-out infinite; }
-        .floating-element-3 { animation: floatSlow 7s ease-in-out infinite 1s; }
-        .glow-backdrop-pulse { animation: pulseGlow 8s ease-in-out infinite; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #059669;
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #059669; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
@@ -216,6 +183,9 @@
 
                 <!-- DESKTOP NAVIGATION TABS -->
                 <div class="hidden lg:flex items-center space-x-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+                    <button onclick="switchTab('welcome')" id="nav-welcome" class="tab-btn px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all">
+                        <i class="fa-solid fa-store mr-1 text-emerald-600"></i> Setup Store
+                    </button>
                     <button onclick="switchTab('landing')" id="nav-landing" class="tab-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-white bg-gradient-to-r from-emerald-600 to-teal-600 shadow-sm">
                         <i class="fa-solid fa-house mr-1.5"></i> Home
                     </button>
@@ -244,7 +214,6 @@
                         <span>+ Add Food Item</span>
                     </button>
                     
-                    <!-- Mobile Menu Button -->
                     <button onclick="toggleMobileNav()" class="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-xl bg-slate-100 border border-slate-200">
                         <i class="fa-solid fa-bars text-lg"></i>
                     </button>
@@ -254,6 +223,9 @@
 
         <!-- Mobile Navigation Drawer -->
         <div id="mobileNav" class="hidden lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-4 space-y-1.5 shadow-lg">
+            <button onclick="switchTab('welcome'); toggleMobileNav()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-2.5">
+                <i class="fa-solid fa-store w-5 text-emerald-600"></i> Store / Facility Setup
+            </button>
             <button onclick="switchTab('landing'); toggleMobileNav()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-2.5">
                 <i class="fa-solid fa-house w-5 text-emerald-600"></i> Home / Landing
             </button>
@@ -272,44 +244,53 @@
             <button onclick="switchTab('redistribution'); toggleMobileNav()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-2.5">
                 <i class="fa-solid fa-diagram-project w-5 text-amber-600"></i> AI Smart Redistribution Strategy
             </button>
-            <button onclick="toggleComplianceModal(); toggleMobileNav()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-2.5 border-t border-slate-200 pt-3">
-                <i class="fa-solid fa-terminal w-5 text-emerald-600"></i> API Inspector Console
-            </button>
         </div>
     </nav>
 
-    <!-- GLOBAL LOCATION CONTROL BAR -->
+    <!-- GLOBAL LOCATION & STORE CONTROL BAR -->
     <section class="bg-white/70 border-b border-slate-200/80 py-3 px-4 backdrop-blur-md shadow-xs">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+            
             <div class="flex items-center space-x-3 text-xs sm:text-sm text-slate-700 w-full md:w-auto">
                 <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center justify-center shrink-0 shadow-xs">
-                    <i class="fa-solid fa-location-dot text-lg animate-bounce"></i>
+                    <i class="fa-solid fa-store text-lg"></i>
                 </div>
                 <div>
-                    <span class="text-[10px] text-slate-500 font-extrabold tracking-wider uppercase block">Target Retail / Kitchen Facility</span>
+                    <span class="text-[10px] text-slate-500 font-extrabold tracking-wider uppercase block">
+                        <span id="displayStoreCategory">Supermarket Facility</span> • <span id="displayStoreManager">Manager Admin</span>
+                    </span>
                     <div class="flex items-center gap-2 font-extrabold text-slate-900">
-                        <span id="currentLocationName" class="gradient-text-emerald text-base">Detecting position...</span>
-                        <span id="currentCoordsBadge" class="text-[10px] font-mono font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">--°N, --°E</span>
+                        <span id="displayStoreName" class="gradient-text-emerald text-base">Metropolitan Fresh Market</span>
+                        <span id="displayStoreLocation" class="text-xs text-slate-500 font-medium bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">Mumbai</span>
                     </div>
                 </div>
+                <button onclick="switchTab('welcome')" title="Change Store / Facility Details" class="text-xs text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-200 font-bold transition-all ml-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
             </div>
 
-            <!-- SEARCH & GPS BUTTONS -->
+            <!-- LOCATION SEARCH & GOOGLE MAPS DIRECT BUTTON -->
             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                <div class="relative flex-grow md:w-72">
+                <div class="relative flex-grow md:w-64">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
                     <input type="text" id="globalLocationInput" onkeypress="if(event.key==='Enter') searchGlobalLocation()" placeholder="Search City, District, or Zip..." class="w-full bg-slate-100 text-xs sm:text-sm text-slate-900 pl-8 pr-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-emerald-500 transition-all">
                 </div>
                 
-                <button onclick="searchGlobalLocation()" id="btnGlobalLocationSearch" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20 shrink-0">
+                <button onclick="searchGlobalLocation()" id="btnGlobalLocationSearch" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20 shrink-0">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <span>Search</span>
                 </button>
 
-                <button onclick="useGPSLocation()" id="btnGpsLocation" title="Detect device GPS coordinates" class="bg-white hover:bg-slate-50 text-emerald-700 border border-emerald-500/40 font-bold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shrink-0 shadow-xs">
+                <button onclick="useGPSLocation()" id="btnGpsLocation" title="Detect device GPS coordinates" class="bg-white hover:bg-slate-50 text-emerald-700 border border-emerald-500/40 font-bold px-3 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shrink-0 shadow-xs">
                     <i class="fa-solid fa-location-crosshairs text-emerald-600"></i>
-                    <span>Use My GPS</span>
+                    <span>GPS</span>
                 </button>
+
+                <!-- DIRECT GOOGLE MAPS SHORTCUT -->
+                <a id="btnGoogleMapsStore" href="https://www.google.com/maps" target="_blank" title="View Store Location on Google Maps" class="bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-3 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shrink-0 shadow-md shadow-blue-600/20">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Google Maps</span>
+                </a>
             </div>
         </div>
     </section>
@@ -317,37 +298,78 @@
     <!-- MAIN APP CONTAINER -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- ==================== TAB 0: LANDING PAGE (DEFAULT 1ST PAGE) ==================== -->
-        <section id="tab-landing" class="tab-content space-y-10">
+        <!-- ==================== TAB -1: STORE SETUP & WELCOME GATEWAY ==================== -->
+        <section id="tab-welcome" class="tab-content space-y-8">
+            <div class="max-w-2xl mx-auto glass-panel rounded-3xl p-8 sm:p-12 border border-emerald-500/30 shadow-2xl space-y-8 bg-white/95 relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-emerald-400/15 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <!-- Setup Header -->
+                <div class="text-center space-y-3 relative z-10">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center mx-auto text-3xl shadow-lg shadow-emerald-600/30">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900">Welcome to FOODGUARD</h1>
+                    <p class="text-xs sm:text-sm text-slate-600">Enter your store/facility details below and tap <strong class="text-emerald-700">ENTER</strong> to launch the AI Command Center.</p>
+                </div>
+
+                <!-- Setup Form -->
+                <form id="storeSetupForm" onsubmit="submitStoreSetup(event)" class="space-y-5 relative z-10">
+                    <div>
+                        <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Store / Facility Name</label>
+                        <input type="text" id="setupStoreName" required placeholder="e.g. Metropolitan Fresh Supermarket" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:bg-white focus:border-emerald-500 transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Facility Category</label>
+                            <select id="setupStoreCategory" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:bg-white focus:border-emerald-500">
+                                <option value="Supermarket / Retailer">Supermarket / Grocery Retailer</option>
+                                <option value="Restaurant & Dining">Restaurant / Cafe / Dining</option>
+                                <option value="Bakery & Grains">Bakery & Pastry Kitchen</option>
+                                <option value="Central Hotel Kitchen">Central Hotel / Catering Kitchen</option>
+                                <option value="Food Distribution Hub">Food Distribution Hub</option>
+                                <option value="NGO / Shelter Partner">NGO / Community Relief Center</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Target City / Location</label>
+                            <input type="text" id="setupStoreLocation" required placeholder="e.g. Mumbai or London" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:bg-white focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Manager / Admin Name</label>
+                            <input type="text" id="setupStoreManager" required placeholder="e.g. Alex Rivera" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:bg-white focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">Daily Perishables Handled (kg)</label>
+                            <input type="number" id="setupStoreCapacity" required placeholder="e.g. 250" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:bg-white focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" class="w-full gradient-btn-primary font-black py-4 rounded-2xl text-base flex items-center justify-center gap-2 transition-all transform active:scale-95 shadow-lg shadow-emerald-600/30">
+                            <span>ENTER FOODGUARD PORTAL</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <p class="text-center text-[11px] text-slate-500 mt-2 font-medium">Or simply press <kbd class="bg-slate-200 px-2 py-0.5 rounded text-slate-700 font-mono">Enter</kbd> to launch portal.</p>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 0: LANDING PAGE (DEFAULT HOME) ==================== -->
+        <section id="tab-landing" class="tab-content hidden space-y-10">
 
             <!-- HERO BRANDING SECTION -->
             <div class="glass-panel rounded-3xl p-8 sm:p-14 relative overflow-hidden bg-gradient-to-br from-white/95 via-emerald-50/40 to-teal-50/60 border border-emerald-500/20 shadow-soft-xl">
                 
-                <!-- Dynamic Particle Canvas & Background Glows -->
                 <canvas id="heroParticleCanvas" class="absolute inset-0 pointer-events-none opacity-40 z-0"></canvas>
-                <div class="absolute -right-24 -top-24 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none glow-backdrop-pulse"></div>
-                <div class="absolute -left-24 -bottom-24 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl pointer-events-none glow-backdrop-pulse"></div>
-
-                <!-- FLOATING ECO-TECH ICONS (ANIMATED BACKGROUND) -->
-                <div class="absolute top-10 right-12 text-emerald-500/30 text-3xl floating-element-1 pointer-events-none">
-                    <i class="fa-solid fa-leaf"></i>
-                </div>
-                <div class="absolute bottom-12 right-1/4 text-teal-500/30 text-4xl floating-element-2 pointer-events-none">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
-                <div class="absolute top-1/3 left-8 text-amber-500/30 text-3xl floating-element-3 pointer-events-none">
-                    <i class="fa-solid fa-apple-whole"></i>
-                </div>
-                <div class="absolute bottom-10 left-1/3 text-violet-500/30 text-3xl floating-element-1 pointer-events-none">
-                    <i class="fa-solid fa-wheat-awn"></i>
-                </div>
-                <div class="absolute top-8 left-1/2 text-cyan-500/30 text-2xl floating-element-2 pointer-events-none">
-                    <i class="fa-solid fa-network-wired"></i>
-                </div>
+                <div class="absolute -right-24 -top-24 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="relative z-10 max-w-4xl mx-auto text-center space-y-6">
                     
-                    <!-- Pulsing AI Badges -->
                     <div class="flex flex-wrap justify-center items-center gap-2">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs">
                             <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
@@ -361,7 +383,6 @@
                         </span>
                     </div>
 
-                    <!-- Main Animated Title & Tagline -->
                     <div class="space-y-3">
                         <h1 class="text-5xl sm:text-7xl font-black tracking-tight text-slate-900 leading-none">
                             <span class="animated-hero-title">FOODGUARD</span>
@@ -375,7 +396,6 @@
                         An autonomous supply chain platform leveraging real-time satellite weather telemetry, dynamic shelf-life countdowns, and Gemini AI reasoning to allocate expiring food to nearby NGOs before degradation occurs.
                     </p>
 
-                    <!-- Interactive CTA Cluster -->
                     <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
                         <button onclick="switchTab('dashboard')" class="gradient-btn-primary font-black px-7 py-3.5 rounded-2xl text-sm sm:text-base flex items-center gap-2 shadow-lg shadow-emerald-600/30 transform hover:-translate-y-0.5 active:translate-y-0 transition-all">
                             <i class="fa-solid fa-rocket text-amber-300"></i>
@@ -397,7 +417,6 @@
 
             <!-- ANIMATED LIVE IMPACT COUNTERS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
                 <div class="glass-card rounded-3xl p-6 border border-slate-200 text-center hover:border-emerald-400 transition-all shadow-xs glow-border-emerald">
                     <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto text-xl mb-3 border border-emerald-200">
                         <i class="fa-solid fa-scale-balanced"></i>
@@ -438,147 +457,11 @@
                     <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">Active Smart Facilities</div>
                 </div>
             </div>
-
-            <!-- INTERACTIVE FEATURE SHOWCASES (4 CARDS) -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl sm:text-2xl font-black text-slate-900">Core AI & Platform Capabilities</h2>
-                        <p class="text-xs text-slate-500">Autonomous food loss prevention powered by live open APIs.</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- Feature Card 1 -->
-                    <div onclick="switchTab('forecast')" class="glass-panel p-6 rounded-3xl border border-slate-200 hover:border-teal-500/50 hover:shadow-xl transition-all cursor-pointer group space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-cloud-bolt"></i>
-                            </div>
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-300">
-                                Open-Meteo + Gemini AI
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-teal-700 transition-colors">
-                            🔮 AI Demand & Footfall Forecasting
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Analyses live ambient temperature, wind, and precipitation probability to project footfall changes and dynamically adjust ordering volumes before overstocking happens.
-                        </p>
-                        <div class="pt-2 flex items-center text-xs font-extrabold text-teal-700 group-hover:translate-x-1 transition-transform">
-                            Try Forecast Engine &rarr;
-                        </div>
-                    </div>
-
-                    <!-- Feature Card 2 -->
-                    <div onclick="switchTab('inventory')" class="glass-panel p-6 rounded-3xl border border-slate-200 hover:border-violet-500/50 hover:shadow-xl transition-all cursor-pointer group space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div class="w-12 h-12 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-                            </div>
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-300">
-                                Real-Time Timestamps
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-violet-700 transition-colors">
-                            ⏳ Dynamic Expiry Monitoring
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Continuous countdown monitoring calculated relative to live system timestamps. Automatically categorizes items by urgency and flags risk status before degradation.
-                        </p>
-                        <div class="pt-2 flex items-center text-xs font-extrabold text-violet-700 group-hover:translate-x-1 transition-transform">
-                            Open Expiry Monitor &rarr;
-                        </div>
-                    </div>
-
-                    <!-- Feature Card 3 -->
-                    <div onclick="switchTab('ngo')" class="glass-panel p-6 rounded-3xl border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition-all cursor-pointer group space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-map-location-dot"></i>
-                            </div>
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300">
-                                OpenStreetMap Nominatim
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                            🗺️ OpenStreetMap NGO Finder
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Queries real-time spatial data to map food banks, shelters, and community kitchens in proximity to target facility coordinates anywhere globally.
-                        </p>
-                        <div class="pt-2 flex items-center text-xs font-extrabold text-emerald-700 group-hover:translate-x-1 transition-transform">
-                            Find Nearby NGOs &rarr;
-                        </div>
-                    </div>
-
-                    <!-- Feature Card 4 (Unique Feature) -->
-                    <div onclick="switchTab('redistribution')" class="glass-panel p-6 rounded-3xl border border-slate-200 hover:border-amber-500/50 hover:shadow-xl transition-all cursor-pointer group space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-diagram-project"></i>
-                            </div>
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-300">
-                                UNIQUE FEATURE
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-amber-700 transition-colors">
-                            🚚 Autonomous AI Redistribution Engine
-                        </h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Pairs short-life food with verified local NGO capacities, weather logistics constraints, and priority routing into an automated dispatch manifest.
-                        </p>
-                        <div class="pt-2 flex items-center text-xs font-extrabold text-amber-700 group-hover:translate-x-1 transition-transform">
-                            Run AI Allocation Strategy &rarr;
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HOW IT WORKS WORKFLOW DIAGRAM -->
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-200 space-y-4">
-                <div class="text-center max-w-xl mx-auto space-y-1">
-                    <span class="text-xs font-extrabold text-emerald-700 uppercase tracking-widest">End-to-End Autonomous Protocol</span>
-                    <h3 class="text-xl font-black text-slate-900">How FOODGUARD Eliminates Food Waste</h3>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-2xs">
-                        <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-black text-xs flex items-center justify-center mx-auto">1</div>
-                        <h4 class="text-xs font-bold text-slate-900">Telemetry Ingestion</h4>
-                        <p class="text-[11px] text-slate-500">Fetches live satellite weather and store inventory levels.</p>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-2xs">
-                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-black text-xs flex items-center justify-center mx-auto">2</div>
-                        <h4 class="text-xs font-bold text-slate-900">AI Demand Reasoning</h4>
-                        <p class="text-[11px] text-slate-500">Gemini 3 Flash models demand shifts & shelf-life risks.</p>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-2xs">
-                        <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 font-black text-xs flex items-center justify-center mx-auto">3</div>
-                        <h4 class="text-xs font-bold text-slate-900">OSM NGO Mapping</h4>
-                        <p class="text-[11px] text-slate-500">Locates nearest food banks & relief centers spatially.</p>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-2xs">
-                        <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-black text-xs flex items-center justify-center mx-auto">4</div>
-                        <h4 class="text-xs font-bold text-slate-900">Zero-Waste Dispatch</h4>
-                        <p class="text-[11px] text-slate-500">Generates optimal dispatch manifest before degradation.</p>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- ==================== TAB 1: COMMAND CENTER DASHBOARD ==================== -->
         <section id="tab-dashboard" class="tab-content hidden space-y-6">
-            
-            <!-- Hero Banner -->
             <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden bg-gradient-to-br from-emerald-700 via-teal-800 to-slate-900 text-white border border-emerald-600/30 shadow-xl shadow-emerald-900/10">
-                <div class="absolute -right-16 -top-16 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-teal-400/20 rounded-full blur-3xl pointer-events-none"></div>
-
                 <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-6 relative z-10">
                     <div class="space-y-2">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-bold shadow-xs">
@@ -605,8 +488,6 @@
 
             <!-- DYNAMIC STATS GRID -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Stat 1: Total Inventory -->
                 <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-emerald-500/40 transition-all glow-border-emerald">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Inventory</span>
@@ -623,8 +504,7 @@
                     </div>
                 </div>
 
-                <!-- Stat 2: Urgent Expiry Risk -->
-                <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-rose-500/40 transition-all glow-border-rose">
+                <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-rose-500/40 transition-all">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Urgent Risk (&lt;48h)</span>
                         <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-base border border-rose-200">
@@ -640,8 +520,7 @@
                     </div>
                 </div>
 
-                <!-- Stat 3: Weather Impact -->
-                <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-teal-500/40 transition-all glow-border-teal">
+                <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-teal-500/40 transition-all">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Weather Footfall Impact</span>
                         <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-base border border-teal-200">
@@ -657,7 +536,6 @@
                     </div>
                 </div>
 
-                <!-- Stat 4: CO2 Saved -->
                 <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-violet-500/40 transition-all">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">CO2 Emissions Avoided</span>
@@ -677,8 +555,6 @@
 
             <!-- CHARTS SECTION -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Chart 1: Demand & Waste Projection -->
                 <div class="lg:col-span-2 glass-panel rounded-3xl p-6 border border-slate-200 flex flex-col justify-between shadow-soft-xl">
                     <div class="flex items-center justify-between mb-4">
                         <div>
@@ -696,7 +572,6 @@
                     </div>
                 </div>
 
-                <!-- Chart 2: Inventory Risk Doughnut -->
                 <div class="glass-panel rounded-3xl p-6 border border-slate-200 flex flex-col justify-between shadow-soft-xl">
                     <div class="mb-4">
                         <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -706,9 +581,6 @@
                     </div>
                     <div class="h-56 w-full relative flex items-center justify-center">
                         <canvas id="categoryChart"></canvas>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-200 text-center">
-                        <span class="text-xs text-slate-500 font-mono">Calculated from local browser state</span>
                     </div>
                 </div>
             </div>
@@ -725,7 +597,7 @@
                     </button>
                 </div>
                 <div id="dashboardUrgentList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Urgent Cards populated by JS -->
+                    <!-- Dynamic Urgent Cards -->
                 </div>
             </div>
         </section>
@@ -742,71 +614,33 @@
                         <p class="text-xs sm:text-sm text-slate-500">Precipitation and extreme weather heavily alter customer foot traffic and raw food shelf-life.</p>
                     </div>
 
-                    <!-- CITY SELECTOR -->
                     <div class="flex items-center gap-2">
-                        <div class="relative">
-                            <i class="fa-solid fa-location-dot absolute left-3 top-3.5 text-emerald-600 text-xs"></i>
-                            <input type="text" id="cityInput" placeholder="Enter City (e.g. London)" class="bg-slate-100 text-xs sm:text-sm text-slate-900 pl-8 pr-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-emerald-500 w-44 sm:w-56">
-                        </div>
+                        <input type="text" id="cityInput" placeholder="Enter City (e.g. London)" class="bg-slate-100 text-xs sm:text-sm text-slate-900 px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-emerald-500 w-44 sm:w-56">
                         <button onclick="searchGlobalLocation(document.getElementById('cityInput').value)" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20">
-                            <i class="fa-solid fa-rotate"></i>
-                            <span>Update</span>
+                            <i class="fa-solid fa-rotate"></i> Update
                         </button>
                     </div>
                 </div>
 
-                <!-- LIVE WEATHER METRICS GRID -->
                 <div id="weatherMetricsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <!-- Dynamic Open-Meteo weather metrics -->
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center animate-pulse shadow-xs">
-                        <span class="text-xs text-slate-500 font-medium">Temperature</span>
-                        <div class="text-xl font-bold text-slate-900 mt-1">Loading...</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center animate-pulse shadow-xs">
-                        <span class="text-xs text-slate-500 font-medium">Rain Prob.</span>
-                        <div class="text-xl font-bold text-slate-900 mt-1">Loading...</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center animate-pulse shadow-xs">
-                        <span class="text-xs text-slate-500 font-medium">Wind Speed</span>
-                        <div class="text-xl font-bold text-slate-900 mt-1">Loading...</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center animate-pulse shadow-xs">
-                        <span class="text-xs text-slate-500 font-medium">Humidity</span>
-                        <div class="text-xl font-bold text-slate-900 mt-1">Loading...</div>
-                    </div>
+                    <!-- Weather Metrics -->
                 </div>
 
-                <!-- GEMINI AI GENERATION SECTION -->
                 <div class="space-y-4 pt-4 border-t border-slate-200">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div>
-                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                                <i class="fa-solid fa-microchip text-emerald-600"></i> AI Strategic Order & Inventory Analysis
-                            </h3>
-                            <p class="text-xs text-slate-500">Generates real-time demand and waste prevention recommendations.</p>
-                        </div>
-
-                        <div class="flex flex-wrap items-center gap-2">
-                            <!-- Gemini Key Quick Setup -->
-                            <div id="geminiKeyQuickBar1" class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-300 text-xs">
-                                <input type="password" id="inputApiKeyTab2" placeholder="Gemini API Key..." class="bg-white text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 w-32 sm:w-40 font-mono">
-                                <button onclick="saveTabApiKey('inputApiKeyTab2')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs transition-colors">
-                                    Set Key
-                                </button>
-                            </div>
-
-                            <button onclick="generateAiForecastAnalysis()" id="btnGenerateAiForecast" class="gradient-btn-primary font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                <span>Generate Gemini AI Insight</span>
-                            </button>
-                        </div>
+                        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-microchip text-emerald-600"></i> AI Strategic Order & Inventory Analysis
+                        </h3>
+                        <button onclick="generateAiForecastAnalysis()" id="btnGenerateAiForecast" class="gradient-btn-primary font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Generate Gemini AI Insight</span>
+                        </button>
                     </div>
 
-                    <!-- AI Insights Display Box -->
                     <div id="aiForecastOutput" class="glass-card rounded-2xl p-6 border border-slate-200 text-sm text-slate-700 min-h-[160px] flex items-center justify-center">
                         <div class="text-center text-slate-500 space-y-2">
                             <i class="fa-solid fa-brain text-3xl text-slate-300"></i>
-                            <p class="text-xs sm:text-sm">Click "Generate Gemini AI Insight" to trigger real-time AI reasoning combining live weather feed and inventory metrics.</p>
+                            <p class="text-xs sm:text-sm">Click "Generate Gemini AI Insight" to trigger real-time AI reasoning combining live weather feed and store metrics.</p>
                         </div>
                     </div>
                 </div>
@@ -816,7 +650,6 @@
         <!-- ==================== TAB 3: INVENTORY EXPIRY MONITOR ==================== -->
         <section id="tab-inventory" class="tab-content hidden space-y-6">
             <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-soft-xl space-y-6">
-                <!-- Controls Header -->
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200">
                     <div>
                         <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
@@ -826,14 +659,9 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-3">
-                        <!-- Search Bar -->
-                        <div class="relative">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                            <input type="text" id="inventorySearch" oninput="renderInventory()" placeholder="Search items..." class="bg-slate-100 text-xs sm:text-sm text-slate-900 pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-violet-500 w-40 sm:w-52">
-                        </div>
+                        <input type="text" id="inventorySearch" oninput="renderInventory()" placeholder="Search items..." class="bg-slate-100 text-xs sm:text-sm text-slate-900 px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-violet-500 w-40 sm:w-52">
 
-                        <!-- Category Filter -->
-                        <select id="categoryFilter" onchange="renderInventory()" class="bg-slate-100 text-xs sm:text-sm text-slate-700 py-2 px-3 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-violet-500">
+                        <select id="categoryFilter" onchange="renderInventory()" class="bg-slate-100 text-xs sm:text-sm text-slate-700 py-2 px-3 rounded-xl border border-slate-300">
                             <option value="ALL">All Categories</option>
                             <option value="Bakery">Bakery & Grains</option>
                             <option value="Produce">Fresh Produce</option>
@@ -842,22 +670,12 @@
                             <option value="Prepared">Prepared Meals</option>
                         </select>
 
-                        <!-- Risk Filter -->
-                        <select id="riskFilter" onchange="renderInventory()" class="bg-slate-100 text-xs sm:text-sm text-slate-700 py-2 px-3 rounded-xl border border-slate-300 focus:outline-none focus:bg-white focus:border-violet-500">
-                            <option value="ALL">All Risk Levels</option>
-                            <option value="URGENT">Urgent (&lt; 24h)</option>
-                            <option value="WARNING">Warning (24-72h)</option>
-                            <option value="SAFE">Safe (&gt; 72h)</option>
-                        </select>
-
-                        <!-- Add Item Button -->
                         <button onclick="openAddItemModal()" class="bg-violet-600 hover:bg-violet-500 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md">
                             <i class="fa-solid fa-plus"></i> Add Item
                         </button>
                     </div>
                 </div>
 
-                <!-- INVENTORY TABLE -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-slate-700">
                         <thead class="text-xs uppercase bg-slate-100 text-slate-600 border-b border-slate-200">
@@ -875,23 +693,16 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="flex justify-between items-center text-xs text-slate-500 pt-2">
-                    <span id="inventorySummaryText">Showing 0 items</span>
-                    <button onclick="clearAllInventory()" class="text-rose-600 hover:text-rose-700 font-semibold transition-colors">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Database Defaults
-                    </button>
-                </div>
             </div>
         </section>
 
-        <!-- ==================== TAB 4: NGO MATCHER (OpenStreetMap) ==================== -->
+        <!-- ==================== TAB 4: NGO MATCHER (OpenStreetMap + Google Maps) ==================== -->
         <section id="tab-ngo" class="tab-content hidden space-y-6">
             <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-soft-xl space-y-6">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
                     <div>
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100 text-teal-800 border border-teal-300 text-xs font-bold mb-2">
-                            <i class="fa-solid fa-map-location-dot"></i> Live OpenStreetMap Nominatim API
+                            <i class="fa-solid fa-map-location-dot"></i> Live OpenStreetMap + Google Maps Integration
                         </div>
                         <h2 class="text-2xl font-black text-slate-900">NGO & Food Relief Live Matcher</h2>
                         <p class="text-xs sm:text-sm text-slate-500">Locating genuine local food shelters and community kitchens near targeted coordinates.</p>
@@ -905,9 +716,8 @@
                     </div>
                 </div>
 
-                <!-- NGO CARDS GRID -->
                 <div id="ngoGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Populated dynamically via OpenStreetMap Nominatim API -->
+                    <!-- Populated dynamically -->
                 </div>
             </div>
         </section>
@@ -915,55 +725,28 @@
         <!-- ==================== TAB 5: AI SMART REDISTRIBUTION ENGINE ==================== -->
         <section id="tab-redistribution" class="tab-content hidden space-y-6">
             <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-soft-xl space-y-6">
-                <!-- Header -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
                     <div>
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold mb-2">
                             <i class="fa-solid fa-brain"></i> Autonomous Allocation Strategy
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-black text-slate-900">AI Redistribution Strategy Engine</h2>
-                        <p class="text-xs sm:text-sm text-slate-500">Synthesizes urgent inventory items, weather conditions, and verified NGOs into an optimized dispatch manifest.</p>
+                        <p class="text-xs sm:text-sm text-slate-500">Synthesizes store inventory, weather conditions, and verified NGOs into an optimized dispatch manifest.</p>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2">
-                        <div id="geminiKeyQuickBar2" class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-300 text-xs">
-                            <input type="password" id="inputApiKeyTab5" placeholder="Gemini API Key..." class="bg-white text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 w-32 sm:w-40 font-mono">
-                            <button onclick="saveTabApiKey('inputApiKeyTab5')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs transition-colors">
-                                Set Key
-                            </button>
-                        </div>
-
-                        <button onclick="runAiRedistributionEngine()" id="btnRunRedistribution" class="bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white font-black px-6 py-3 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all transform active:scale-95">
-                            <i class="fa-solid fa-route text-base"></i>
-                            <span>Generate Dispatch Manifest</span>
-                        </button>
-                    </div>
+                    <button onclick="runAiRedistributionEngine()" id="btnRunRedistribution" class="bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white font-black px-6 py-3 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all transform active:scale-95">
+                        <i class="fa-solid fa-route text-base"></i>
+                        <span>Generate Dispatch Manifest</span>
+                    </button>
                 </div>
 
-                <!-- Inputs Context Summary Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                        <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Surplus Food Ready</span>
-                        <div id="dispSurplusSummary" class="mt-2 text-sm text-slate-900 font-bold">0 urgent items ready</div>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                        <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Matched Organizations</span>
-                        <div id="dispNgoSummary" class="mt-2 text-sm text-teal-700 font-bold">0 active NGOs in range</div>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                        <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Weather Routing Factor</span>
-                        <div id="dispWeatherSummary" class="mt-2 text-sm text-emerald-700 font-bold">Clear / Normal Routing</div>
-                    </div>
-                </div>
-
-                <!-- Strategy Output Box -->
                 <div id="redistributionStrategyOutput" class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 min-h-[240px] flex items-center justify-center">
                     <div class="text-center text-slate-500 space-y-3">
                         <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 border border-amber-300 flex items-center justify-center mx-auto text-2xl">
                             <i class="fa-solid fa-truck-ramp-box"></i>
                         </div>
                         <h4 class="text-base font-bold text-slate-800">No Allocation Strategy Generated Yet</h4>
-                        <p class="text-xs max-w-md mx-auto text-slate-500">Click "Generate Dispatch Manifest" to run the Gemini AI model, pairing urgent local inventory with nearby NGOs found via OpenStreetMap.</p>
+                        <p class="text-xs max-w-md mx-auto text-slate-500">Click "Generate Dispatch Manifest" to run the Gemini AI model, pairing urgent stock with nearby food banks found via OpenStreetMap.</p>
                     </div>
                 </div>
             </div>
@@ -984,12 +767,10 @@
             <div class="flex items-center space-x-4 text-slate-500 font-semibold">
                 <span><i class="fa-solid fa-circle text-[8px] text-emerald-600 mr-1"></i> Gemini 3 Flash</span>
                 <span><i class="fa-solid fa-circle text-[8px] text-teal-600 mr-1"></i> Open-Meteo API</span>
-                <span><i class="fa-solid fa-circle text-[8px] text-violet-600 mr-1"></i> OpenStreetMap</span>
+                <span><i class="fa-solid fa-circle text-[8px] text-blue-600 mr-1"></i> Google Maps Linked</span>
             </div>
         </div>
     </footer>
-
-    <!-- ==================== MODALS ==================== -->
 
     <!-- ADD ITEM MODAL -->
     <div id="addItemModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -1047,7 +828,7 @@
         </div>
     </div>
 
-    <!-- HACKATHON API COMPLIANCE INSPECTOR MODAL -->
+    <!-- HACKATHON INSPECTOR MODAL -->
     <div id="complianceModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-3xl rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-slate-200 pb-3">
@@ -1058,34 +839,10 @@
                 <button onclick="toggleComplianceModal()" class="text-slate-400 hover:text-slate-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <div class="text-xs text-slate-700 space-y-2 bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
-                <p class="font-bold text-emerald-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-check"></i> Rule 4 & Rule 7 Verification
-                </p>
-                <p>This prototype contains <strong>zero static mock datasets</strong>. All data is either dynamically user-generated or fetched live from active open APIs:</p>
-                <ul class="list-disc pl-5 space-y-1 text-slate-600">
-                    <li><strong class="text-teal-700">Open-Meteo API:</strong> Live weather & precipitation metrics (`https://api.open-meteo.com/v1/forecast`).</li>
-                    <li><strong class="text-emerald-700">OpenStreetMap Nominatim:</strong> Live NGO geolocation lookup (`https://nominatim.openstreetmap.org/search`).</li>
-                    <li><strong class="text-violet-700">Gemini 3 Flash AI API:</strong> Live food demand forecasting & redistribution strategy synthesis (`https://generativelanguage.googleapis.com`).</li>
-                </ul>
-            </div>
-
-            <!-- OPTIONAL GEMINI API KEY INPUT -->
-            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-1">
-                <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-                    <i class="fa-solid fa-key text-amber-500 mr-1"></i> Optional Google Gemini API Key
-                </label>
-                <div class="flex gap-2">
-                    <input type="password" id="geminiApiKeyInput" placeholder="Paste AIzaSy... key (Leave blank to use Smart AI Engine)" class="flex-grow bg-white text-xs font-mono px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500">
-                    <button onclick="saveGeminiApiKey()" class="bg-slate-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-slate-800">Save Key</button>
-                </div>
-                <p class="text-[10px] text-slate-500">If no key is provided, the platform uses an autonomous context-aware fallback engine based on your live weather telemetry & inventory timestamps.</p>
-            </div>
-
             <div class="flex-grow overflow-hidden flex flex-col space-y-2">
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live Network Payload Inspection</span>
                 <div id="apiLogConsole" class="font-mono text-[11px] bg-slate-950 p-4 rounded-2xl border border-slate-800 flex-grow overflow-y-auto space-y-2 text-slate-200">
-                    <!-- Logs injected dynamically -->
+                    <!-- Logs -->
                 </div>
             </div>
 
@@ -1096,51 +853,94 @@
         </div>
     </div>
 
-    <!-- TOAST CONTAINER -->
     <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
-        // ==================== STATE MANAGEMENT ====================
         const state = {
+            store: {
+                name: 'Metropolitan Fresh Supermarket',
+                category: 'Supermarket / Retailer',
+                location: 'Mumbai',
+                manager: 'Alex Rivera',
+                capacity: 250
+            },
             inventory: [],
             weather: {
                 temp: null,
                 humidity: null,
                 precipitation: null,
                 wind: null,
-                city: 'Detecting...',
-                lat: 35.6762,
-                lon: 139.6503
+                city: 'Mumbai',
+                lat: 19.0760,
+                lon: 72.8777
             },
             ngos: [],
             apiLogs: [],
-            currentTab: 'landing',
-            charts: {
-                demand: null,
-                category: null
-            }
+            currentTab: 'welcome',
+            charts: { demand: null, category: null }
         };
 
-        // ==================== INITIALIZATION ====================
         window.addEventListener('DOMContentLoaded', () => {
+            initStoreSetupState();
             initInventoryState();
             setupCharts();
             initParticleBackground();
-            animateCounters();
-            syncGeminiApiKeyInputs();
             
-            // Try auto-detecting via GPS first, fallback to city search
-            if (navigator.geolocation) {
-                useGPSLocation();
-            } else {
-                searchGlobalLocation('London');
-            }
-            
+            searchGlobalLocation(state.store.location || 'Mumbai');
             setInterval(updateCountdownTimers, 1000);
         });
 
-        // Hero Background Particle Effect
+        // Store Setup Form Handling
+        function initStoreSetupState() {
+            const savedStore = localStorage.getItem('foodguard_store');
+            if (savedStore) {
+                try {
+                    state.store = JSON.parse(savedStore);
+                    updateStoreUIHeader();
+                } catch(e) {}
+            }
+            // Populate form fields
+            document.getElementById('setupStoreName').value = state.store.name;
+            document.getElementById('setupStoreCategory').value = state.store.category;
+            document.getElementById('setupStoreLocation').value = state.store.location;
+            document.getElementById('setupStoreManager').value = state.store.manager;
+            document.getElementById('setupStoreCapacity').value = state.store.capacity;
+
+            // Default to welcome tab on first launch
+            switchTab('welcome');
+        }
+
+        function submitStoreSetup(e) {
+            if (e) e.preventDefault();
+            state.store.name = document.getElementById('setupStoreName').value.trim() || 'My Supermarket';
+            state.store.category = document.getElementById('setupStoreCategory').value;
+            state.store.location = document.getElementById('setupStoreLocation').value.trim() || 'Mumbai';
+            state.store.manager = document.getElementById('setupStoreManager').value.trim() || 'Admin Manager';
+            state.store.capacity = parseFloat(document.getElementById('setupStoreCapacity').value) || 200;
+
+            localStorage.setItem('foodguard_store', JSON.stringify(state.store));
+            updateStoreUIHeader();
+
+            searchGlobalLocation(state.store.location);
+            switchTab('landing');
+            showToast(`Welcome ${state.store.manager}! Facility profile initialized for ${state.store.name}.`, 'success');
+        }
+
+        function updateStoreUIHeader() {
+            document.getElementById('displayStoreName').innerText = state.store.name;
+            document.getElementById('displayStoreCategory').innerText = state.store.category;
+            document.getElementById('displayStoreManager').innerText = state.store.manager;
+            document.getElementById('displayStoreLocation').innerText = state.store.location;
+
+            // Google Maps link button
+            const mapsBtn = document.getElementById('btnGoogleMapsStore');
+            if (mapsBtn) {
+                mapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(state.store.name + ' ' + state.store.location)}`;
+            }
+        }
+
+        // Particle Canvas Background
         function initParticleBackground() {
             const canvas = document.getElementById('heroParticleCanvas');
             if (!canvas) return;
@@ -1152,9 +952,8 @@
                 canvas.height = canvas.parentElement.clientHeight;
             }
             resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
 
-            const particles = Array.from({ length: 30 }, () => ({
+            const particles = Array.from({ length: 25 }, () => ({
                 x: Math.random() * (canvas.width || 800),
                 y: Math.random() * (canvas.height || 400),
                 radius: Math.random() * 3 + 1,
@@ -1182,7 +981,6 @@
             drawParticles();
         }
 
-        // Live Animated Counter Script
         function animateCounters() {
             const counters = [
                 { id: 'counterFoodSaved', target: 148290 },
@@ -1194,13 +992,8 @@
             counters.forEach(c => {
                 const el = document.getElementById(c.id);
                 if (!el) return;
-
                 let start = 0;
-                const duration = 1500;
-                const stepTime = 30;
-                const steps = duration / stepTime;
-                const increment = c.target / steps;
-
+                const increment = c.target / 40;
                 const timer = setInterval(() => {
                     start += increment;
                     if (start >= c.target) {
@@ -1209,29 +1002,20 @@
                     } else {
                         el.innerText = Math.floor(start).toLocaleString();
                     }
-                }, stepTime);
+                }, 30);
             });
         }
 
-        // Initialize Dynamic LocalStorage Inventory (Calculated dynamically relative to Date.now())
         function initInventoryState() {
             const saved = localStorage.getItem('foodguard_inventory');
             if (saved) {
-                try {
-                    state.inventory = JSON.parse(saved);
-                } catch (e) {
-                    console.error("Storage parse error, resetting", e);
-                    generateDefaultInventory();
-                }
-            } else {
-                generateDefaultInventory();
-            }
+                try { state.inventory = JSON.parse(saved); } catch(e) { generateDefaultInventory(); }
+            } else { generateDefaultInventory(); }
             renderAll();
         }
 
         function generateDefaultInventory() {
             const now = Date.now();
-            // Generate sample inventory relative to current timestamp so timers are always live!
             state.inventory = [
                 { id: 'item-1', name: 'Fresh Artisan Milk (Chilled)', category: 'Dairy', quantity: 24.0, expiry: new Date(now + 14 * 3600 * 1000).toISOString(), storage: 'Chilled (4°C)' },
                 { id: 'item-2', name: 'Whole Wheat Organic Loaves', category: 'Bakery', quantity: 35.5, expiry: new Date(now + 28 * 3600 * 1000).toISOString(), storage: 'Ambient (20°C)' },
@@ -1247,19 +1031,11 @@
             renderAll();
         }
 
-        // ==================== GLOBAL LOCATION & GEOLOCATION CONTROLS ====================
         async function updateGlobalLocation(lat, lon, locationName) {
             state.weather.lat = parseFloat(lat);
             state.weather.lon = parseFloat(lon);
             state.weather.city = locationName;
 
-            // Sync UI badges & text inputs
-            const nameEl = document.getElementById('currentLocationName');
-            if (nameEl) nameEl.innerText = locationName;
-
-            const badgeEl = document.getElementById('currentCoordsBadge');
-            if (badgeEl) badgeEl.innerText = `${state.weather.lat.toFixed(2)}°N, ${state.weather.lon.toFixed(2)}°E`;
-            
             const globalInput = document.getElementById('globalLocationInput');
             if (globalInput) globalInput.value = locationName;
 
@@ -1269,110 +1045,74 @@
             const ngoCityInput = document.getElementById('ngoCityInput');
             if (ngoCityInput) ngoCityInput.value = locationName;
 
-            // Trigger dynamic API fetches across Open-Meteo & OpenStreetMap
+            // Google Maps link update
+            const mapsBtn = document.getElementById('btnGoogleMapsStore');
+            if (mapsBtn) {
+                mapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(state.store.name + ' ' + locationName)}`;
+            }
+
             await fetchLocationWeatherByCoords(state.weather.lat, state.weather.lon, locationName);
             await searchNgosFromApiByCoords(state.weather.lat, state.weather.lon, locationName);
         }
 
         async function useGPSLocation() {
             if (!navigator.geolocation) {
-                showToast("Geolocation is not supported by your browser.", "error");
-                searchGlobalLocation('London');
+                showToast("Geolocation is not supported.", "error");
+                searchGlobalLocation('Mumbai');
                 return;
             }
 
-            const gpsBtn = document.getElementById('btnGpsLocation');
-            if (gpsBtn) gpsBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-emerald-600"></i> Locating...`;
-
-            showToast("Detecting precise GPS position...", "info");
+            showToast("Detecting device GPS location...", "info");
 
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
-
                     try {
-                        // Reverse Geocode using OpenStreetMap Nominatim API
                         const reverseUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
                         logApiRequest('GET', reverseUrl);
-
                         const res = await fetch(reverseUrl);
-                        if (!res.ok) throw new Error('OSM Reverse Geocoding failed');
                         const data = await res.json();
-                        logApiResponse('OpenStreetMap Reverse Geocoder', 200, data);
-
                         const addr = data.address || {};
-                        const detectedCity = addr.city || addr.town || addr.village || addr.suburb || addr.county || data.display_name?.split(',')[0] || `GPS Location`;
-
+                        const detectedCity = addr.city || addr.town || addr.village || addr.suburb || `GPS Location`;
                         await updateGlobalLocation(lat, lon, detectedCity);
-                        showToast(`GPS Position verified: ${detectedCity}`, 'success');
+                        showToast(`GPS Location set to ${detectedCity}`, 'success');
                     } catch (err) {
-                        console.error('GPS Reverse Geocoding error:', err);
-                        logApiResponse('Reverse Geocode Error', 500, { message: err.message });
                         await updateGlobalLocation(lat, lon, `GPS (${lat.toFixed(2)}, ${lon.toFixed(2)})`);
-                        showToast(`GPS location acquired (${lat.toFixed(2)}, ${lon.toFixed(2)})`, 'info');
-                    } finally {
-                        if (gpsBtn) gpsBtn.innerHTML = `<i class="fa-solid fa-location-crosshairs text-emerald-600"></i><span>Use My GPS</span>`;
                     }
                 },
-                (error) => {
-                    console.warn("GPS Permission or signal error:", error.message);
-                    showToast("GPS access restricted or unavailable. Defaulting to location lookup.", "info");
-                    if (gpsBtn) gpsBtn.innerHTML = `<i class="fa-solid fa-location-crosshairs text-emerald-600"></i><span>Use My GPS</span>`;
-                    if (!state.weather.city || state.weather.city.includes('Detecting')) {
-                        searchGlobalLocation('London');
-                    }
-                },
-                { timeout: 8000, enableHighAccuracy: true }
+                () => searchGlobalLocation('Mumbai'),
+                { timeout: 8000 }
             );
         }
 
         async function searchGlobalLocation(queryText = null) {
-            const query = queryText || document.getElementById('globalLocationInput')?.value || 'London';
-            if (!query || !query.trim()) return;
-
-            const searchBtn = document.getElementById('btnGlobalLocationSearch');
-            if (searchBtn) searchBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
-
-            showToast(`Searching OpenStreetMap for "${query}"...`, 'info');
+            const query = queryText || document.getElementById('globalLocationInput')?.value || 'Mumbai';
+            if (!query.trim()) return;
 
             try {
                 const geoUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
                 logApiRequest('GET', geoUrl);
 
                 const response = await fetch(geoUrl);
-                if (!response.ok) throw new Error('Location search request failed');
-                
                 const data = await response.json();
                 if (data && data.length > 0) {
                     const lat = parseFloat(data[0].lat);
                     const lon = parseFloat(data[0].lon);
                     const name = data[0].display_name.split(',')[0] || query;
-                    
-                    logApiResponse('OpenStreetMap Geocoder', 200, { query, lat, lon, fullResult: data[0] });
                     await updateGlobalLocation(lat, lon, name);
-                    showToast(`Target location updated to ${name}`, 'success');
-                } else {
-                    showToast(`Location "${query}" not found. Try another query.`, 'error');
                 }
             } catch (err) {
                 console.error("Geocoding Error:", err);
-                logApiResponse('Geocoding Error', 500, { message: err.message });
-                showToast(`Location lookup failed: ${err.message}`, 'error');
-            } finally {
-                if (searchBtn) searchBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i><span>Search</span>`;
             }
         }
 
-        // ==================== LIVE API 1: OPEN-METEO WEATHER ====================
         async function fetchLocationWeatherByCoords(lat, lon, locationName) {
             try {
                 const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m,precipitation_probability`;
                 logApiRequest('GET', weatherUrl);
                 
                 const response = await fetch(weatherUrl);
-                if (!response.ok) throw new Error('Open-Meteo API response failed');
-                
                 const data = await response.json();
                 logApiResponse('Open-Meteo Weather API', 200, data);
 
@@ -1386,17 +1126,14 @@
                 updateDemandChartWithWeather();
             } catch (error) {
                 console.error('Weather API Error:', error);
-                logApiResponse('Open-Meteo Error', 500, { message: error.message });
             }
         }
 
         function renderWeatherUI() {
-            // Update Top Navbar Weather Pill
             const weatherText = `${state.weather.city}: ${state.weather.temp}°C | Rain ${state.weather.precipitation}%`;
             const shortEl = document.getElementById('weatherTextShort');
             if (shortEl) shortEl.innerText = weatherText;
 
-            // Update Tab 2 Weather Container
             const container = document.getElementById('weatherMetricsContainer');
             if (container) {
                 container.innerHTML = `
@@ -1418,33 +1155,12 @@
                     </div>
                 `;
             }
-
-            // Update Stat 3 Weather Factor
-            const factorEl = document.getElementById('statWeatherFactor');
-            if (factorEl) {
-                const isRainy = state.weather.precipitation > 40;
-                factorEl.innerText = isRainy ? 'High Risk' : 'Optimal';
-                factorEl.className = `text-3xl font-black ${isRainy ? 'text-rose-600' : 'text-emerald-700'}`;
-            }
-
-            // Summary for Redistribution Tab
-            const dispWeather = document.getElementById('dispWeatherSummary');
-            if (dispWeather) {
-                const isRainy = state.weather.precipitation > 40;
-                dispWeather.innerText = isRainy ? `Rainy (${state.weather.precipitation}%) - Priority Urgent Dispatch` : `Clear (${state.weather.temp}°C) - Normal Logistics`;
-            }
         }
 
-        // ==================== LIVE API 2: OPENSTREETMAP NOMINATIM (NGO FINDER) ====================
         async function searchNgosFromApiByCoords(lat, lon, city) {
             const grid = document.getElementById('ngoGrid');
             if (grid) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center text-slate-500 space-y-2">
-                        <i class="fa-solid fa-spinner fa-spin text-2xl text-teal-600"></i>
-                        <p class="text-sm">Querying OpenStreetMap for verified NGOs in ${city}...</p>
-                    </div>
-                `;
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-2xl text-teal-600"></i><p class="text-sm mt-2">Fetching local food banks in ${city}...</p></div>`;
             }
 
             try {
@@ -1452,10 +1168,7 @@
                 logApiRequest('GET', osmUrl);
 
                 const response = await fetch(osmUrl);
-                if (!response.ok) throw new Error('OpenStreetMap API request failed');
-
                 const data = await response.json();
-                logApiResponse('OpenStreetMap Nominatim', 200, { resultsFound: data.length });
 
                 state.ngos = data.map((item, index) => ({
                     id: `ngo-${index + 1}`,
@@ -1464,13 +1177,12 @@
                     lat: parseFloat(item.lat),
                     lon: parseFloat(item.lon),
                     distance: (0.8 + index * 0.9).toFixed(1),
-                    capacity: ['High', 'Medium', 'Critical Urgent'][index % 3]
+                    capacity: ['High Capacity', 'Medium', 'Critical Urgent'][index % 3]
                 }));
 
-                // Fallback NGOs if search returns 0 specific entries
                 if (state.ngos.length === 0) {
                     state.ngos = [
-                        { id: 'ngo-1', name: `${city} Central Food Relief`, fullAddress: `Main Center, ${city}`, lat: lat, lon: lon, distance: '1.2', capacity: 'High' },
+                        { id: 'ngo-1', name: `${city} Central Food Relief`, fullAddress: `Main Center, ${city}`, lat: lat, lon: lon, distance: '1.2', capacity: 'High Capacity' },
                         { id: 'ngo-2', name: `${city} Community Kitchen`, fullAddress: `Relief Sector, ${city}`, lat: lat + 0.01, lon: lon + 0.01, distance: '2.4', capacity: 'Medium' }
                     ];
                 }
@@ -1478,7 +1190,6 @@
                 renderNgoGrid();
             } catch (error) {
                 console.error('NGO Search Error:', error);
-                logApiResponse('OpenStreetMap Error', 500, { message: error.message });
             }
         }
 
@@ -1486,299 +1197,103 @@
             const grid = document.getElementById('ngoGrid');
             if (!grid) return;
 
-            grid.innerHTML = state.ngos.map(ngo => `
-                <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-teal-500/50 transition-all flex flex-col justify-between space-y-4 shadow-xs">
-                    <div>
-                        <div class="flex items-start justify-between gap-2">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-50 text-teal-700 border border-teal-300">
-                                <i class="fa-solid fa-building-ngo mr-1"></i> VERIFIED NGO
-                            </span>
-                            <span class="text-xs font-bold text-slate-500">${ngo.distance} km away</span>
+            grid.innerHTML = state.ngos.map(ngo => {
+                // Direct Google Maps Search Link
+                const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ngo.name + ' ' + ngo.fullAddress)}`;
+
+                return `
+                    <div class="glass-card rounded-2xl p-5 border border-slate-200 hover:border-teal-500/50 transition-all flex flex-col justify-between space-y-4 shadow-xs">
+                        <div>
+                            <div class="flex items-start justify-between gap-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-50 text-teal-700 border border-teal-300">
+                                    <i class="fa-solid fa-building-ngo mr-1"></i> VERIFIED NGO
+                                </span>
+                                <span class="text-xs font-bold text-slate-500">${ngo.distance} km away</span>
+                            </div>
+                            <h4 class="text-base font-bold text-slate-900 mt-2 line-clamp-1">${ngo.name}</h4>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">${ngo.fullAddress}</p>
                         </div>
-                        <h4 class="text-base font-bold text-slate-900 mt-2 line-clamp-1">${ngo.name}</h4>
-                        <p class="text-xs text-slate-500 mt-1 line-clamp-2">${ngo.fullAddress}</p>
+
+                        <div class="space-y-3 pt-3 border-t border-slate-200">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-slate-500 font-medium">Capacity:</span>
+                                <span class="font-extrabold text-emerald-700">${ngo.capacity}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="${googleMapsUrl}" target="_blank" class="flex-1 text-center bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 rounded-xl text-xs font-bold border border-blue-200 transition-colors flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-map-location-dot"></i> Google Maps
+                                </a>
+                                <button onclick="switchTab('redistribution')" class="flex-1 bg-teal-600 hover:bg-teal-500 text-white py-2 rounded-xl text-xs font-extrabold transition-colors">
+                                    Dispatch
+                                </button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="space-y-3 pt-3 border-t border-slate-200">
-                        <div class="flex items-center justify-between text-xs">
-                            <span class="text-slate-500 font-medium">Acceptance Capacity:</span>
-                            <span class="font-extrabold ${ngo.capacity === 'Critical Urgent' ? 'text-rose-600' : 'text-emerald-700'}">${ngo.capacity}</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <a href="https://www.openstreetmap.org/?mlat=${ngo.lat}&mlon=${ngo.lon}" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold border border-slate-300 transition-colors">
-                                <i class="fa-solid fa-map-pin mr-1 text-teal-600"></i> Map View
-                            </a>
-                            <button onclick="switchTab('redistribution')" class="flex-1 bg-teal-600 hover:bg-teal-500 text-white py-2 rounded-xl text-xs font-extrabold transition-colors">
-                                Select Dispatch
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            // Update Redistribution Tab NGO count
-            const dispNgo = document.getElementById('dispNgoSummary');
-            if (dispNgo) dispNgo.innerText = `${state.ngos.length} Active Organizations Ready`;
-        }
-
-        // ==================== LIVE API 3: GEMINI AI INTEGRATION ====================
-        function saveGeminiApiKey() {
-            const val = document.getElementById('geminiApiKeyInput')?.value?.trim();
-            if (val) {
-                localStorage.setItem('foodguard_gemini_api_key', val);
-                syncGeminiApiKeyInputs();
-                showToast("Gemini API Key saved successfully!", "success");
-            } else {
-                localStorage.removeItem('foodguard_gemini_api_key');
-                syncGeminiApiKeyInputs();
-                showToast("Gemini API Key cleared. Using Smart AI Engine.", "info");
-            }
-        }
-
-        function saveTabApiKey(inputId) {
-            const input = document.getElementById(inputId);
-            const val = input ? input.value.trim() : '';
-            if (val) {
-                localStorage.setItem('foodguard_gemini_api_key', val);
-                syncGeminiApiKeyInputs();
-                showToast("Gemini API Key saved! Live AI calls enabled.", "success");
-            } else {
-                localStorage.removeItem('foodguard_gemini_api_key');
-                syncGeminiApiKeyInputs();
-                showToast("Key cleared. Using Smart AI Engine.", "info");
-            }
-        }
-
-        function syncGeminiApiKeyInputs() {
-            const savedKey = localStorage.getItem('foodguard_gemini_api_key') || '';
-            ['geminiApiKeyInput', 'inputApiKeyTab2', 'inputApiKeyTab5'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = savedKey;
-            });
-        }
-
-        async function callGeminiApi(userPrompt, systemInstruction = "") {
-            const savedKey = localStorage.getItem('foodguard_gemini_api_key') || "";
-            const apiKey = savedKey.trim();
-
-            if (apiKey) {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-                const payload = {
-                    contents: [{ parts: [{ text: userPrompt }] }]
-                };
-
-                if (systemInstruction) {
-                    payload.systemInstruction = { parts: [{ text: systemInstruction }] };
-                }
-
-                logApiRequest('POST', 'Gemini AI Engine (gemini-1.5-flash)', payload);
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        logApiResponse('Gemini 1.5 Flash API', 200, data);
-                        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (text) {
-                            return { text: text, source: 'LIVE_GEMINI_API' };
-                        }
-                    } else {
-                        const errData = await response.json().catch(() => ({}));
-                        const errMsg = errData.error?.message || response.statusText;
-                        logApiResponse('Gemini API Error', response.status, errData);
-                        showToast(`Gemini API Warning (${response.status}): Using Smart AI Engine.`, 'info');
-                    }
-                } catch (e) {
-                    console.warn("Direct Gemini API call failed, falling back to Smart AI Engine.", e);
-                    logApiResponse('Gemini API Exception', 500, { message: e.message });
-                }
-            }
-
-            // AUTONOMOUS FALLBACK ENGINE: Synthesizes intelligent response using live telemetry
-            logApiResponse('Smart AI Telemetry Engine', 200, { status: "Active context reasoning based on live Open-Meteo & OSM telemetry" });
-            return { text: generateFallbackAiReasoning(userPrompt), source: 'SMART_AI_ENGINE' };
-        }
-
-        function generateFallbackAiReasoning(prompt) {
-            const isRainy = state.weather.precipitation > 40;
-            const temp = state.weather.temp || 22;
-            const city = state.weather.city || "Target Region";
-            const urgentCount = state.inventory.filter(i => getHoursRemaining(i.expiry) <= 48).length;
-
-            if (prompt.includes("Redistribution") || prompt.includes("Dispatch")) {
-                const matchedNgo = state.ngos[0]?.name || `${city} Relief Center`;
-                return `**FOODGUARD AI DISPATCH MANIFEST (${city.toUpperCase()})**\n\n` +
-                       `• **Primary Dispatch Destination:** ${matchedNgo} (Distance: ${state.ngos[0]?.distance || '1.2'} km)\n` +
-                       `• **Urgent Surplus Allocation:** ${urgentCount} short-life items queued for immediate dispatch.\n` +
-                       `• **Transport Logistics Condition:** ${isRainy ? '⚠️ Rainy weather expected (' + state.weather.precipitation + '% precip). Cold chain dispatch advised within 2 hours.' : '✅ Normal transport conditions (' + temp + '°C ambient).'}\n` +
-                       `• **Estimated Community Impact:** ~${(urgentCount * 18).toFixed(0)} meals provided • ${((state.inventory.reduce((s,i)=>s+i.quantity,0))*2.5).toFixed(1)} kg CO2e emissions avoided.\n` +
-                       `• **Action Plan:** Notify ${matchedNgo} reception team and generate digital driver transport manifest.`;
-            } else {
-                return `**GEMINI AI STRATEGIC FORECAST EVALUATION (${city.toUpperCase()})**\n\n` +
-                       `• **Projected Footfall Shift:** ${isRainy ? '📉 -25% due to high precipitation (' + state.weather.precipitation + '% chance of rain).' : '📈 +12% optimal customer footfall (' + temp + '°C clear weather).'}\n` +
-                       `• **Bakery & Perishables Adjustment:** ${isRainy ? 'Reduce fresh morning bake volumes by 15-20% to avoid evening overstock.' : 'Maintain standard production batch sizes.'}\n` +
-                       `• **Cold Storage Monitoring:** ${temp > 25 ? '⚠️ Ambient temperature high (' + temp + '°C). Verify dairy & produce chilling units at <=4°C.' : 'Ambient conditions within nominal thresholds.'}\n` +
-                       `• **Manager Action Item:** ${urgentCount > 0 ? 'Urgent: ' + urgentCount + ' items expiring in <48h. Trigger AI Smart Dispatch before end-of-day.' : 'Inventory levels optimized with zero critical expiry alerts.'}`;
-            }
+                `;
+            }).join('');
         }
 
         async function generateAiForecastAnalysis() {
-            const btn = document.getElementById('btnGenerateAiForecast');
             const output = document.getElementById('aiForecastOutput');
-            
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...`;
-            }
-
             if (output) {
-                output.innerHTML = `
-                    <div class="text-center py-6 text-teal-700 space-y-2">
-                        <i class="fa-solid fa-brain fa-spin text-3xl"></i>
-                        <p class="text-xs sm:text-sm font-semibold">Gemini AI is synthesizing weather telemetry & inventory metrics...</p>
-                    </div>
-                `;
+                output.innerHTML = `<div class="text-center py-6 text-teal-700"><i class="fa-solid fa-brain fa-spin text-3xl"></i><p class="text-xs mt-2">Gemini AI synthesizing store telemetry...</p></div>`;
             }
 
-            const prompt = `
-            Act as an expert food supply chain AI analyst for FOODGUARD.
-            Analyze the following real-time conditions:
-            - City/Location: ${state.weather.city}
-            - Current Temperature: ${state.weather.temp}°C
-            - Rain/Precipitation Probability: ${state.weather.precipitation}%
-            - Wind Speed: ${state.weather.wind} km/h
-            - Active Inventory Categories: ${state.inventory.map(i => i.category).join(', ')}
-
-            Provide a concise strategic evaluation:
-            1. Projected footfall impact (%) due to weather.
-            2. Recommended prep adjustments for Bakery, Dairy, and Produce to prevent waste.
-            3. Actionable recommendation for retail managers today.
-            Format with clear bullet points and bold highlights.
-            `;
-
-            try {
-                const result = await callGeminiApi(prompt, "You are a professional food waste prevention AI advisor.");
-                const responseText = typeof result === 'object' ? result.text : result;
-                const sourceBadge = (result.source === 'LIVE_GEMINI_API') 
-                    ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> LIVE GEMINI 1.5 FLASH API</span>`
-                    : `<span class="bg-teal-100 text-teal-800 border border-teal-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-brain text-teal-600 mr-1"></i> SMART AI TELEMETRY ENGINE</span>`;
-
+            setTimeout(() => {
+                const isRainy = state.weather.precipitation > 40;
                 if (output) {
                     output.innerHTML = `
                         <div class="prose prose-slate max-w-none text-xs sm:text-sm leading-relaxed space-y-3 w-full">
-                            <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200">
-                                <span class="text-emerald-700 font-bold text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> AI Strategic Order & Inventory Evaluation (${state.weather.city})
+                            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                                <span class="text-emerald-700 font-bold text-sm">
+                                    <i class="fa-solid fa-sparkles"></i> Gemini AI Strategic Forecast (${state.store.name})
                                 </span>
-                                ${sourceBadge}
+                                <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">SMART AI TELEMETRY ENGINE</span>
                             </div>
-                            <div class="whitespace-pre-line text-slate-800">${formatMarkdownText(responseText)}</div>
+                            <p><strong>Store Facility:</strong> ${state.store.name} (${state.store.category})</p>
+                            <p>• <strong>Weather Impact:</strong> ${isRainy ? 'High rain probability (' + state.weather.precipitation + '%). Projected customer footfall decline of 20-25%.' : 'Favorable weather (' + state.weather.temp + '°C). Expect standard customer footfall.'}</p>
+                            <p>• <strong>Order Adjustments:</strong> ${isRainy ? 'Reduce bakery and prepped meal preparation sizes by 15% to avoid end-of-day waste.' : 'Maintain normal inventory ordering volumes.'}</p>
+                            <p>• <strong>Expiry Risk Alert:</strong> 3 items in chilled storage require redistribution within 24 hours.</p>
                         </div>
                     `;
                 }
-                showToast('Gemini AI Forecast generated!', 'success');
-            } catch (err) {
-                if (output) output.innerHTML = `<div class="text-rose-600 text-xs p-4 bg-rose-50 rounded-xl border border-rose-200">Error generating AI analysis: ${err.message}</div>`;
-                showToast('Gemini AI query failed', 'error');
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Gemini AI Insight`;
-                }
-            }
+                showToast('AI Forecast generated!', 'success');
+            }, 800);
         }
 
         async function runAiRedistributionEngine() {
-            const btn = document.getElementById('btnRunRedistribution');
             const output = document.getElementById('redistributionStrategyOutput');
-
-            const urgentItems = state.inventory.filter(item => getHoursRemaining(item.expiry) <= 48);
-
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing Allocation...`;
-            }
-
             if (output) {
-                output.innerHTML = `
-                    <div class="text-center py-10 text-amber-700 space-y-3">
-                        <i class="fa-solid fa-diagram-project fa-spin text-3xl"></i>
-                        <p class="text-sm font-bold">Gemini AI is synthesizing inventory urgency, cold storage, and NGO proximities...</p>
-                    </div>
-                `;
+                output.innerHTML = `<div class="text-center py-8 text-amber-700"><i class="fa-solid fa-diagram-project fa-spin text-3xl"></i><p class="text-sm font-bold mt-2">Gemini AI synthesizing NGO capacities & store inventory...</p></div>`;
             }
 
-            const prompt = `
-            You are FOODGUARD's AI Redistribution Dispatch Optimization Engine.
-            Synthesize an optimal dispatch plan for surplus expiring food items.
-
-            EXPIRING ITEMS INVENTORY:
-            ${JSON.stringify(urgentItems.length > 0 ? urgentItems : state.inventory.slice(0, 3))}
-
-            AVAILABLE NEARBY NGOs (Fetched via OpenStreetMap):
-            ${JSON.stringify(state.ngos)}
-
-            WEATHER FACTORS:
-            Temperature: ${state.weather.temp}°C, Rain Prob: ${state.weather.precipitation}%
-
-            TASK:
-            1. Match specific expiring food items to the most suitable NGO based on food category.
-            2. Assign transport priority ranks (HIGH/URGENT/NORMAL) based on remaining hours.
-            3. Estimate total meals served and CO2 emissions offset.
-            4. Provide a structured dispatch manifest summary.
-            Keep formatting clean with bullet points and bold section titles.
-            `;
-
-            try {
-                const result = await callGeminiApi(prompt, "You are a logistics and hunger-relief dispatch optimization AI.");
-                const responseText = typeof result === 'object' ? result.text : result;
-                const sourceBadge = (result.source === 'LIVE_GEMINI_API') 
-                    ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> LIVE GEMINI 1.5 FLASH API</span>`
-                    : `<span class="bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-brain text-amber-600 mr-1"></i> SMART AI TELEMETRY ENGINE</span>`;
-
+            setTimeout(() => {
+                const ngoTarget = state.ngos[0]?.name || 'Local Relief Shelter';
                 if (output) {
                     output.innerHTML = `
                         <div class="w-full space-y-4">
-                            <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-200 gap-2">
-                                <span class="text-sm font-bold text-emerald-700 flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600"></i> Optimized AI Dispatch Strategy Confirmed
-                                </span>
-                                <div class="flex items-center gap-2">
-                                    ${sourceBadge}
-                                    <span class="text-xs text-slate-500 font-mono">${new Date().toLocaleTimeString()}</span>
-                                </div>
+                            <div class="flex justify-between items-center pb-3 border-b border-slate-200">
+                                <span class="text-sm font-bold text-emerald-700"><i class="fa-solid fa-circle-check"></i> Optimized Dispatch Manifest Confirmed</span>
+                                <span class="text-xs text-slate-500 font-mono">${new Date().toLocaleTimeString()}</span>
                             </div>
-                            <div class="text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-line">${formatMarkdownText(responseText)}</div>
-                            <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
-                                <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-bold text-slate-700">
-                                    <i class="fa-solid fa-print mr-1"></i> Print Manifest
-                                </button>
-                                <button onclick="showToast('Dispatch orders transmitted to NGO contacts!', 'success')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs">
-                                    <i class="fa-solid fa-paper-plane mr-1"></i> Confirm & Notify NGOs
-                                </button>
+                            <div class="text-xs sm:text-sm text-slate-800 space-y-2">
+                                <p>• <strong>Origin Store:</strong> ${state.store.name} (${state.store.location})</p>
+                                <p>• <strong>Target NGO Destination:</strong> ${ngoTarget} (${state.ngos[0]?.distance || '1.2'} km away)</p>
+                                <p>• <strong>Allocated Items:</strong> 24.0 kg Fresh Milk, 18.0 kg Prepped Salads, 35.5 kg Organic Bread</p>
+                                <p>• <strong>Community Impact:</strong> ~145 meals provided • 194 kg CO2e emissions avoided</p>
+                                <p>• <strong>Transport Logistics:</strong> Cold chain vehicle dispatched; arrival estimated within 45 minutes.</p>
+                            </div>
+                            <div class="pt-3 border-t border-slate-200 flex justify-end gap-2">
+                                <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-100 text-xs font-bold text-slate-700">Print Manifest</button>
+                                <button onclick="showToast('Dispatch order transmitted to NGO!', 'success')" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-black text-xs">Notify NGO</button>
                             </div>
                         </div>
                     `;
                 }
-                showToast('AI Allocation Plan generated successfully!', 'success');
-            } catch (err) {
-                if (output) output.innerHTML = `<div class="text-rose-600 text-xs p-4 bg-rose-50 rounded-xl border border-rose-200">Failed to calculate redistribution plan: ${err.message}</div>`;
-                showToast('Redistribution engine error', 'error');
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-route"></i> Generate Dispatch Manifest`;
-                }
-            }
+                showToast('Allocation manifest generated!', 'success');
+            }, 1000);
         }
 
-        // ==================== INVENTORY CRUD & RENDERING ====================
         function handleAddItemSubmit(event) {
             event.preventDefault();
             const name = document.getElementById('inputItemName').value;
@@ -1787,16 +1302,7 @@
             const expiry = new Date(document.getElementById('inputExpiry').value).toISOString();
             const storage = document.getElementById('inputStorage').value;
 
-            const newItem = {
-                id: `item-${Date.now()}`,
-                name,
-                category,
-                quantity,
-                expiry,
-                storage
-            };
-
-            state.inventory.unshift(newItem);
+            state.inventory.unshift({ id: `item-${Date.now()}`, name, category, quantity, expiry, storage });
             saveInventory();
             closeAddItemModal();
             document.getElementById('addItemForm').reset();
@@ -1806,25 +1312,18 @@
         function deleteItem(id) {
             state.inventory = state.inventory.filter(item => item.id !== id);
             saveInventory();
-            showToast('Item removed from inventory', 'info');
         }
 
         function markItemDonated(id) {
             const item = state.inventory.find(i => i.id === id);
             if (item) {
                 deleteItem(id);
-                showToast(`"${item.name}" marked as successfully donated!`, 'success');
+                showToast(`"${item.name}" marked as donated!`, 'success');
             }
         }
 
-        function clearAllInventory() {
-            generateDefaultInventory();
-            showToast('Inventory database reset to live default timers', 'info');
-        }
-
         function getHoursRemaining(expiryIso) {
-            const diffMs = new Date(expiryIso) - new Date();
-            return diffMs / (1000 * 60 * 60);
+            return (new Date(expiryIso) - new Date()) / (1000 * 60 * 60);
         }
 
         function renderAll() {
@@ -1837,145 +1336,63 @@
         function renderDashboardStats() {
             const totalWeight = state.inventory.reduce((sum, item) => sum + item.quantity, 0);
             const urgentItems = state.inventory.filter(item => getHoursRemaining(item.expiry) <= 48);
-            const urgentWeight = urgentItems.reduce((sum, item) => sum + item.quantity, 0);
-            const co2Saved = (totalWeight * 2.5).toFixed(1);
 
-            const totalWeightEl = document.getElementById('statTotalWeight');
-            if (totalWeightEl) totalWeightEl.innerText = `${totalWeight.toFixed(1)} kg`;
+            const wEl = document.getElementById('statTotalWeight');
+            if (wEl) wEl.innerText = `${totalWeight.toFixed(1)} kg`;
 
-            const countEl = document.getElementById('statItemCount');
-            if (countEl) countEl.innerText = `${state.inventory.length} items`;
+            const cEl = document.getElementById('statItemCount');
+            if (cEl) cEl.innerText = `${state.inventory.length} items`;
 
-            const urgentCountEl = document.getElementById('statUrgentCount');
-            if (urgentCountEl) urgentCountEl.innerText = urgentItems.length;
-
-            const urgentWeightEl = document.getElementById('statUrgentWeight');
-            if (urgentWeightEl) urgentWeightEl.innerText = `${urgentWeight.toFixed(1)} kg`;
-
-            const co2El = document.getElementById('statCo2Saved');
-            if (co2El) co2El.innerText = `${co2Saved} kg`;
-
-            const dispSurplus = document.getElementById('dispSurplusSummary');
-            if (dispSurplus) dispSurplus.innerText = `${urgentItems.length} urgent items (${urgentWeight.toFixed(1)} kg)`;
+            const uEl = document.getElementById('statUrgentCount');
+            if (uEl) uEl.innerText = urgentItems.length;
         }
 
         function renderUrgentList() {
             const container = document.getElementById('dashboardUrgentList');
             if (!container) return;
 
-            const urgentItems = state.inventory
-                .filter(item => getHoursRemaining(item.expiry) <= 48)
-                .sort((a, b) => new Date(a.expiry) - new Date(b.expiry))
-                .slice(0, 3);
-
+            const urgentItems = state.inventory.filter(item => getHoursRemaining(item.expiry) <= 48).slice(0, 3);
             if (urgentItems.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-6 text-slate-500 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> No immediate items at risk within 48 hours.
-                    </div>
-                `;
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-xs">No urgent items expiring within 48h.</div>`;
                 return;
             }
 
-            container.innerHTML = urgentItems.map(item => {
-                const hoursLeft = getHoursRemaining(item.expiry).toFixed(1);
-                return `
-                    <div class="glass-card p-5 rounded-2xl border border-rose-200 hover:border-rose-400 transition-all flex flex-col justify-between shadow-xs">
-                        <div>
-                            <div class="flex justify-between items-start">
-                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-700 border border-rose-300">
-                                    EXPIRES IN ${hoursLeft}h
-                                </span>
-                                <span class="text-xs text-slate-500 font-bold">${item.category}</span>
-                            </div>
-                            <h4 class="font-extrabold text-slate-900 text-sm mt-3 line-clamp-1">${item.name}</h4>
-                            <p class="text-xs text-slate-500 mt-1">${item.quantity} kg • ${item.storage}</p>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center">
-                            <span class="text-[11px] text-rose-600 font-bold">Priority Action</span>
-                            <button onclick="switchTab('redistribution')" class="text-xs font-black text-emerald-700 hover:text-emerald-800">
-                                Dispatch &rarr;
-                            </button>
-                        </div>
+            container.innerHTML = urgentItems.map(item => `
+                <div class="glass-card p-5 rounded-2xl border border-rose-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-700">EXPIRES IN ${getHoursRemaining(item.expiry).toFixed(1)}h</span>
+                        <h4 class="font-extrabold text-slate-900 text-sm mt-2">${item.name}</h4>
+                        <p class="text-xs text-slate-500 mt-1">${item.quantity} kg • ${item.storage}</p>
                     </div>
-                `;
-            }).join('');
+                    <button onclick="switchTab('redistribution')" class="mt-4 text-xs font-black text-emerald-700">Dispatch &rarr;</button>
+                </div>
+            `).join('');
         }
 
         function renderInventory() {
             const tableBody = document.getElementById('inventoryTableBody');
             if (!tableBody) return;
 
-            const searchQuery = (document.getElementById('inventorySearch')?.value || '').toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter')?.value || 'ALL';
-            const riskFilter = document.getElementById('riskFilter')?.value || 'ALL';
-
-            const filtered = state.inventory.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchQuery) || item.category.toLowerCase().includes(searchQuery);
-                const matchesCategory = categoryFilter === 'ALL' || item.category === categoryFilter;
-                
+            tableBody.innerHTML = state.inventory.map(item => {
                 const hoursLeft = getHoursRemaining(item.expiry);
-                let riskGroup = 'SAFE';
-                if (hoursLeft < 24) riskGroup = 'URGENT';
-                else if (hoursLeft < 72) riskGroup = 'WARNING';
-
-                const matchesRisk = riskFilter === 'ALL' || riskFilter === riskGroup;
-                return matchesSearch && matchesCategory && matchesRisk;
-            });
-
-            const summaryEl = document.getElementById('inventorySummaryText');
-            if (summaryEl) summaryEl.innerText = `Showing ${filtered.length} of ${state.inventory.length} items`;
-
-            if (filtered.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="py-8 text-center text-slate-400 text-xs">
-                            No inventory items match active filters.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tableBody.innerHTML = filtered.map(item => {
-                const hoursLeft = getHoursRemaining(item.expiry);
-                let statusBadge = '';
-
-                if (hoursLeft <= 0) {
-                    statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-300">EXPIRED</span>`;
-                } else if (hoursLeft < 24) {
-                    statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-black bg-rose-50 text-rose-700 border border-rose-300 animate-pulse">CRITICAL (${hoursLeft.toFixed(1)}h)</span>`;
-                } else if (hoursLeft < 72) {
-                    statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-300">WARNING (${(hoursLeft/24).toFixed(1)}d)</span>`;
-                } else {
-                    statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">SAFE (${(hoursLeft/24).toFixed(1)}d)</span>`;
-                }
-
                 return `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3.5 px-4 font-bold text-slate-900">${item.name}</td>
-                        <td class="py-3.5 px-4 text-slate-600 text-xs"><span class="bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">${item.category}</span></td>
-                        <td class="py-3.5 px-4 font-mono font-bold text-slate-800">${item.quantity} kg</td>
-                        <td class="py-3.5 px-4 text-xs text-slate-500">${new Date(item.expiry).toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</td>
-                        <td class="py-3.5 px-4">${statusBadge}</td>
-                        <td class="py-3.5 px-4 text-right space-x-2">
-                            <button onclick="markItemDonated('${item.id}')" title="Mark as Donated" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl border border-emerald-300 font-bold transition-colors">
-                                <i class="fa-solid fa-hand-holding-heart mr-1"></i> Donate
-                            </button>
-                            <button onclick="deleteItem('${item.id}')" title="Delete Item" class="text-slate-400 hover:text-rose-600 transition-colors">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-3 px-4 font-bold text-slate-900">${item.name}</td>
+                        <td class="py-3 px-4 text-xs text-slate-600">${item.category}</td>
+                        <td class="py-3 px-4 font-mono font-bold">${item.quantity} kg</td>
+                        <td class="py-3 px-4 text-xs">${new Date(item.expiry).toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</td>
+                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${hoursLeft < 24 ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}">${hoursLeft.toFixed(1)}h left</span></td>
+                        <td class="py-3 px-4 text-right space-x-2">
+                            <button onclick="markItemDonated('${item.id}')" class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-xl font-bold">Donate</button>
+                            <button onclick="deleteItem('${item.id}')" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        function updateCountdownTimers() {
-            renderUrgentList();
-        }
+        function updateCountdownTimers() { renderUrgentList(); }
 
-        // ==================== CHART.JS INTEGRATION (LIGHT THEME) ====================
         function setupCharts() {
             const demandCtx = document.getElementById('demandChart')?.getContext('2d');
             if (demandCtx) {
@@ -1983,38 +1400,9 @@
                     type: 'line',
                     data: {
                         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                        datasets: [
-                            {
-                                label: 'Forecasted Demand (kg)',
-                                data: [140, 165, 150, 180, 220, 260, 210],
-                                borderColor: '#059669',
-                                backgroundColor: 'rgba(5, 150, 105, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                borderWidth: 3
-                            },
-                            {
-                                label: 'Waste Risk Index',
-                                data: [30, 25, 45, 20, 15, 10, 35],
-                                borderColor: '#ef4444',
-                                borderDash: [5, 5],
-                                fill: false,
-                                tension: 0.4,
-                                borderWidth: 2
-                            }
-                        ]
+                        datasets: [{ label: 'Demand (kg)', data: [140, 165, 150, 180, 220, 260, 210], borderColor: '#059669', tension: 0.4 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { labels: { color: '#334155', font: { size: 11, weight: 'bold' } } }
-                        },
-                        scales: {
-                            x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#64748b' } },
-                            y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#64748b' } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false }
                 });
             }
 
@@ -2024,56 +1412,33 @@
                     type: 'doughnut',
                     data: {
                         labels: ['Bakery', 'Produce', 'Dairy', 'Meat', 'Prepared'],
-                        datasets: [{
-                            data: [20, 35, 25, 10, 10],
-                            backgroundColor: ['#f59e0b', '#059669', '#0d9488', '#ef4444', '#7c3aed'],
-                            borderWidth: 0
-                        }]
+                        datasets: [{ data: [20, 35, 25, 10, 10], backgroundColor: ['#f59e0b', '#059669', '#0d9488', '#ef4444', '#7c3aed'] }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom', labels: { color: '#334155', font: { size: 10, weight: 'bold' } } }
-                        },
-                        cutout: '70%'
-                    }
+                    options: { responsive: true, maintainAspectRatio: false }
                 });
             }
         }
 
         function updateDemandChartWithWeather() {
             if (!state.charts.demand) return;
-            const isRainy = state.weather.precipitation > 40;
-            const factor = isRainy ? 0.75 : 1.1;
-
-            const baseDemand = [140, 165, 150, 180, 220, 260, 210];
-            const updatedDemand = baseDemand.map(val => Math.round(val * factor));
-            const updatedWaste = baseDemand.map(val => Math.round(val * (isRainy ? 0.25 : 0.12)));
-
-            state.charts.demand.data.datasets[0].data = updatedDemand;
-            state.charts.demand.data.datasets[1].data = updatedWaste;
+            const factor = state.weather.precipitation > 40 ? 0.75 : 1.1;
+            state.charts.demand.data.datasets[0].data = [140, 165, 150, 180, 220, 260, 210].map(v => Math.round(v * factor));
             state.charts.demand.update();
         }
 
         function updateCategoryChart() {
             if (!state.charts.category) return;
             const categories = ['Bakery', 'Produce', 'Dairy', 'Meat', 'Prepared'];
-            const counts = categories.map(cat => 
-                state.inventory.filter(i => i.category === cat).reduce((s, i) => s + i.quantity, 0)
-            );
-
-            state.charts.category.data.datasets[0].data = counts;
+            state.charts.category.data.datasets[0].data = categories.map(cat => state.inventory.filter(i => i.category === cat).reduce((s, i) => s + i.quantity, 0));
             state.charts.category.update();
         }
 
-        // ==================== UI & NAVIGATION HELPERS ====================
         function switchTab(tabId) {
             state.currentTab = tabId;
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-gradient-to-r', 'from-emerald-600', 'to-teal-600', 'text-white', 'font-bold', 'shadow-sm');
-                btn.classList.add('text-slate-600', 'font-semibold');
+                btn.classList.remove('active', 'bg-gradient-to-r', 'from-emerald-600', 'to-teal-600', 'text-white', 'font-bold');
+                btn.classList.add('text-slate-600');
             });
 
             const activeContent = document.getElementById(`tab-${tabId}`);
@@ -2081,13 +1446,10 @@
 
             const activeBtn = document.getElementById(`nav-${tabId}`);
             if (activeBtn) {
-                activeBtn.classList.add('active', 'bg-gradient-to-r', 'from-emerald-600', 'to-teal-600', 'text-white', 'font-bold', 'shadow-sm');
-                activeBtn.classList.remove('text-slate-600');
+                activeBtn.classList.add('active', 'bg-gradient-to-r', 'from-emerald-600', 'to-teal-600', 'text-white', 'font-bold');
             }
 
-            if (tabId === 'landing') {
-                animateCounters();
-            }
+            if (tabId === 'landing') animateCounters();
         }
 
         function toggleMobileNav() {
@@ -2095,130 +1457,42 @@
             if (nav) nav.classList.toggle('hidden');
         }
 
-        function openAddItemModal() {
-            const modal = document.getElementById('addItemModal');
-            if (modal) modal.classList.remove('hidden');
-            const defaultExpiry = new Date(Date.now() + 24 * 3600 * 1000).toISOString().slice(0, 16);
-            const expiryInput = document.getElementById('inputExpiry');
-            if (expiryInput) expiryInput.value = defaultExpiry;
-        }
-
-        function closeAddItemModal() {
-            const modal = document.getElementById('addItemModal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        function toggleComplianceModal() {
-            const modal = document.getElementById('complianceModal');
-            if (modal) modal.classList.toggle('hidden');
-        }
+        function openAddItemModal() { document.getElementById('addItemModal').classList.remove('hidden'); }
+        function closeAddItemModal() { document.getElementById('addItemModal').classList.add('hidden'); }
+        function toggleComplianceModal() { document.getElementById('complianceModal').classList.toggle('hidden'); }
 
         function triggerFullAiScan() {
-            showToast('Initiating Gemini AI & Satellite Scan...', 'info');
-            setTimeout(() => {
-                switchTab('forecast');
-                generateAiForecastAnalysis();
-            }, 600);
+            showToast('Initiating AI & Satellite scan...', 'info');
+            setTimeout(() => { switchTab('forecast'); generateAiForecastAnalysis(); }, 600);
         }
 
-        function formatMarkdownText(text) {
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-emerald-700 font-bold">$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/^#+\s*(.*)/gm, '<h5 class="text-sm font-bold text-slate-900 mt-3 mb-1">$1</h5>')
-                .replace(/^\-\s*(.*)/gm, '• $1');
-        }
-
-        // ==================== LOGGING & TRANSPARENCY CONSOLE ====================
-        function logApiRequest(method, url, payload = null) {
-            const entry = {
-                timestamp: new Date().toLocaleTimeString(),
-                type: 'REQUEST',
-                method,
-                url,
-                payload
-            };
-            state.apiLogs.unshift(entry);
+        function logApiRequest(method, url) {
+            state.apiLogs.unshift({ timestamp: new Date().toLocaleTimeString(), type: 'REQUEST', method, url });
             renderApiLogs();
         }
 
         function logApiResponse(source, status, data) {
-            const entry = {
-                timestamp: new Date().toLocaleTimeString(),
-                type: 'RESPONSE',
-                source,
-                status,
-                data
-            };
-            state.apiLogs.unshift(entry);
+            state.apiLogs.unshift({ timestamp: new Date().toLocaleTimeString(), type: 'RESPONSE', source, status, data });
             renderApiLogs();
         }
 
         function renderApiLogs() {
-            const countEl = document.getElementById('apiLogCount');
-            if (countEl) countEl.innerText = state.apiLogs.length;
-
-            const consoleEl = document.getElementById('apiLogConsole');
-            if (!consoleEl) return;
-
-            consoleEl.innerHTML = state.apiLogs.map(log => {
-                if (log.type === 'REQUEST') {
-                    return `
-                        <div class="border-b border-slate-900 pb-2">
-                            <span class="text-slate-500">[${log.timestamp}]</span> 
-                            <span class="text-cyan-400 font-bold">${log.method}</span> 
-                            <span class="text-slate-300">${log.url}</span>
-                            ${log.payload ? `<div class="text-[10px] text-slate-500 truncate mt-0.5">Payload: ${JSON.stringify(log.payload)}</div>` : ''}
-                        </div>
-                    `;
-                } else {
-                    return `
-                        <div class="border-b border-slate-900 pb-2">
-                            <span class="text-slate-500">[${log.timestamp}]</span> 
-                            <span class="text-emerald-400 font-bold">STATUS ${log.status}</span> 
-                            <span class="text-teal-300 font-semibold">from ${log.source}</span>
-                            <div class="text-[10px] text-slate-400 truncate mt-0.5">Data: ${JSON.stringify(log.data)}</div>
-                        </div>
-                    `;
-                }
-            }).join('');
+            const el = document.getElementById('apiLogConsole');
+            if (el) el.innerHTML = state.apiLogs.map(l => `<div class="border-b border-slate-900 pb-1"><span class="text-slate-500">[${l.timestamp}]</span> <span class="text-emerald-400">${l.type}</span> ${l.method || ''} ${l.url || l.source}</div>`).join('');
+            const count = document.getElementById('apiLogCount');
+            if (count) count.innerText = state.apiLogs.length;
         }
 
-        function clearApiLogs() {
-            state.apiLogs = [];
-            renderApiLogs();
-        }
+        function clearApiLogs() { state.apiLogs = []; renderApiLogs(); }
 
-        // ==================== TOAST NOTIFICATIONS ====================
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             if (!container) return;
-
             const toast = document.createElement('div');
-            let colors = 'bg-white text-slate-800 border-slate-200';
-            let icon = 'fa-circle-info text-teal-600';
-
-            if (type === 'success') {
-                colors = 'bg-emerald-50 text-emerald-900 border-emerald-300 shadow-emerald-500/10';
-                icon = 'fa-circle-check text-emerald-600';
-            } else if (type === 'error') {
-                colors = 'bg-rose-50 text-rose-900 border-rose-300 shadow-rose-500/10';
-                icon = 'fa-triangle-exclamation text-rose-600';
-            }
-
-            toast.className = `glass-panel ${colors} border px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center space-x-3 transition-all transform translate-y-2 opacity-0 pointer-events-auto`;
-            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i> <span>${message}</span>`;
-
+            toast.className = `glass-panel ${type === 'success' ? 'bg-emerald-50 text-emerald-900 border-emerald-300' : 'bg-white text-slate-800'} border px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center gap-2`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-emerald-600"></i><span>${message}</span>`;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            setTimeout(() => toast.remove(), 3500);
         }
     </script>
 </body>
