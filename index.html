@@ -779,13 +779,27 @@
                 <!-- GEMINI AI GENERATION SECTION -->
                 <div class="space-y-4 pt-4 border-t border-slate-200">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-microchip text-emerald-600"></i> AI Strategic Order & Inventory Analysis
-                        </h3>
-                        <button onclick="generateAiForecastAnalysis()" id="btnGenerateAiForecast" class="gradient-btn-primary font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
-                            <span>Generate Gemini AI Insight</span>
-                        </button>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-microchip text-emerald-600"></i> AI Strategic Order & Inventory Analysis
+                            </h3>
+                            <p class="text-xs text-slate-500">Generates real-time demand and waste prevention recommendations.</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <!-- Gemini Key Quick Setup -->
+                            <div id="geminiKeyQuickBar1" class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-300 text-xs">
+                                <input type="password" id="inputApiKeyTab2" placeholder="Gemini API Key..." class="bg-white text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 w-32 sm:w-40 font-mono">
+                                <button onclick="saveTabApiKey('inputApiKeyTab2')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs transition-colors">
+                                    Set Key
+                                </button>
+                            </div>
+
+                            <button onclick="generateAiForecastAnalysis()" id="btnGenerateAiForecast" class="gradient-btn-primary font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>Generate Gemini AI Insight</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- AI Insights Display Box -->
@@ -911,10 +925,19 @@
                         <p class="text-xs sm:text-sm text-slate-500">Synthesizes urgent inventory items, weather conditions, and verified NGOs into an optimized dispatch manifest.</p>
                     </div>
 
-                    <button onclick="runAiRedistributionEngine()" id="btnRunRedistribution" class="bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white font-black px-6 py-3 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all transform active:scale-95">
-                        <i class="fa-solid fa-route text-base"></i>
-                        <span>Generate Dispatch Manifest</span>
-                    </button>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div id="geminiKeyQuickBar2" class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-300 text-xs">
+                            <input type="password" id="inputApiKeyTab5" placeholder="Gemini API Key..." class="bg-white text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-500 w-32 sm:w-40 font-mono">
+                            <button onclick="saveTabApiKey('inputApiKeyTab5')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs transition-colors">
+                                Set Key
+                            </button>
+                        </div>
+
+                        <button onclick="runAiRedistributionEngine()" id="btnRunRedistribution" class="bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white font-black px-6 py-3 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all transform active:scale-95">
+                            <i class="fa-solid fa-route text-base"></i>
+                            <span>Generate Dispatch Manifest</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Inputs Context Summary Grid -->
@@ -1105,6 +1128,7 @@
             setupCharts();
             initParticleBackground();
             animateCounters();
+            syncGeminiApiKeyInputs();
             
             // Try auto-detecting via GPS first, fallback to city search
             if (navigator.geolocation) {
@@ -1502,11 +1526,35 @@
             const val = document.getElementById('geminiApiKeyInput')?.value?.trim();
             if (val) {
                 localStorage.setItem('foodguard_gemini_api_key', val);
+                syncGeminiApiKeyInputs();
                 showToast("Gemini API Key saved successfully!", "success");
             } else {
                 localStorage.removeItem('foodguard_gemini_api_key');
+                syncGeminiApiKeyInputs();
                 showToast("Gemini API Key cleared. Using Smart AI Engine.", "info");
             }
+        }
+
+        function saveTabApiKey(inputId) {
+            const input = document.getElementById(inputId);
+            const val = input ? input.value.trim() : '';
+            if (val) {
+                localStorage.setItem('foodguard_gemini_api_key', val);
+                syncGeminiApiKeyInputs();
+                showToast("Gemini API Key saved! Live AI calls enabled.", "success");
+            } else {
+                localStorage.removeItem('foodguard_gemini_api_key');
+                syncGeminiApiKeyInputs();
+                showToast("Key cleared. Using Smart AI Engine.", "info");
+            }
+        }
+
+        function syncGeminiApiKeyInputs() {
+            const savedKey = localStorage.getItem('foodguard_gemini_api_key') || '';
+            ['geminiApiKeyInput', 'inputApiKeyTab2', 'inputApiKeyTab5'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = savedKey;
+            });
         }
 
         async function callGeminiApi(userPrompt, systemInstruction = "") {
@@ -1535,20 +1583,26 @@
 
                     if (response.ok) {
                         const data = await response.json();
-                        logApiResponse('Gemini AI Response', 200, data);
-                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "No insights generated.";
+                        logApiResponse('Gemini 1.5 Flash API', 200, data);
+                        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (text) {
+                            return { text: text, source: 'LIVE_GEMINI_API' };
+                        }
                     } else {
-                        const errText = await response.text();
-                        logApiResponse('Gemini API Warning', response.status, { error: errText });
+                        const errData = await response.json().catch(() => ({}));
+                        const errMsg = errData.error?.message || response.statusText;
+                        logApiResponse('Gemini API Error', response.status, errData);
+                        showToast(`Gemini API Warning (${response.status}): Using Smart AI Engine.`, 'info');
                     }
                 } catch (e) {
-                    console.warn("Direct Gemini API network call failed, falling back to autonomous AI reasoning.", e);
+                    console.warn("Direct Gemini API call failed, falling back to Smart AI Engine.", e);
+                    logApiResponse('Gemini API Exception', 500, { message: e.message });
                 }
             }
 
             // AUTONOMOUS FALLBACK ENGINE: Synthesizes intelligent response using live telemetry
-            logApiResponse('Gemini AI Engine (Autonomous Fallback)', 200, { status: "Active context reasoning based on live Open-Meteo & OSM telemetry" });
-            return generateFallbackAiReasoning(userPrompt);
+            logApiResponse('Smart AI Telemetry Engine', 200, { status: "Active context reasoning based on live Open-Meteo & OSM telemetry" });
+            return { text: generateFallbackAiReasoning(userPrompt), source: 'SMART_AI_ENGINE' };
         }
 
         function generateFallbackAiReasoning(prompt) {
@@ -1609,12 +1663,20 @@
             `;
 
             try {
-                const responseText = await callGeminiApi(prompt, "You are a professional food waste prevention AI advisor.");
+                const result = await callGeminiApi(prompt, "You are a professional food waste prevention AI advisor.");
+                const responseText = typeof result === 'object' ? result.text : result;
+                const sourceBadge = (result.source === 'LIVE_GEMINI_API') 
+                    ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> LIVE GEMINI 1.5 FLASH API</span>`
+                    : `<span class="bg-teal-100 text-teal-800 border border-teal-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-brain text-teal-600 mr-1"></i> SMART AI TELEMETRY ENGINE</span>`;
+
                 if (output) {
                     output.innerHTML = `
-                        <div class="prose prose-slate max-w-none text-xs sm:text-sm leading-relaxed space-y-2 w-full">
-                            <div class="flex items-center gap-2 text-emerald-700 font-bold mb-2 pb-2 border-b border-slate-200">
-                                <i class="fa-solid fa-sparkles"></i> Gemini AI Strategic Evaluation (${state.weather.city})
+                        <div class="prose prose-slate max-w-none text-xs sm:text-sm leading-relaxed space-y-3 w-full">
+                            <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200">
+                                <span class="text-emerald-700 font-bold text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i> AI Strategic Order & Inventory Evaluation (${state.weather.city})
+                                </span>
+                                ${sourceBadge}
                             </div>
                             <div class="whitespace-pre-line text-slate-800">${formatMarkdownText(responseText)}</div>
                         </div>
@@ -1622,7 +1684,7 @@
                 }
                 showToast('Gemini AI Forecast generated!', 'success');
             } catch (err) {
-                if (output) output.innerHTML = `<div class="text-rose-600 text-xs">Error generating AI analysis: ${err.message}</div>`;
+                if (output) output.innerHTML = `<div class="text-rose-600 text-xs p-4 bg-rose-50 rounded-xl border border-rose-200">Error generating AI analysis: ${err.message}</div>`;
                 showToast('Gemini AI query failed', 'error');
             } finally {
                 if (btn) {
@@ -1674,15 +1736,23 @@
             `;
 
             try {
-                const responseText = await callGeminiApi(prompt, "You are a logistics and hunger-relief dispatch optimization AI.");
+                const result = await callGeminiApi(prompt, "You are a logistics and hunger-relief dispatch optimization AI.");
+                const responseText = typeof result === 'object' ? result.text : result;
+                const sourceBadge = (result.source === 'LIVE_GEMINI_API') 
+                    ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> LIVE GEMINI 1.5 FLASH API</span>`
+                    : `<span class="bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-brain text-amber-600 mr-1"></i> SMART AI TELEMETRY ENGINE</span>`;
+
                 if (output) {
                     output.innerHTML = `
                         <div class="w-full space-y-4">
-                            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                            <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-200 gap-2">
                                 <span class="text-sm font-bold text-emerald-700 flex items-center gap-2">
                                     <i class="fa-solid fa-circle-check text-emerald-600"></i> Optimized AI Dispatch Strategy Confirmed
                                 </span>
-                                <span class="text-xs text-slate-500 font-mono">Timestamp: ${new Date().toLocaleTimeString()}</span>
+                                <div class="flex items-center gap-2">
+                                    ${sourceBadge}
+                                    <span class="text-xs text-slate-500 font-mono">${new Date().toLocaleTimeString()}</span>
+                                </div>
                             </div>
                             <div class="text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-line">${formatMarkdownText(responseText)}</div>
                             <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
@@ -1698,7 +1768,7 @@
                 }
                 showToast('AI Allocation Plan generated successfully!', 'success');
             } catch (err) {
-                if (output) output.innerHTML = `<div class="text-rose-600 text-xs">Failed to calculate redistribution plan: ${err.message}</div>`;
+                if (output) output.innerHTML = `<div class="text-rose-600 text-xs p-4 bg-rose-50 rounded-xl border border-rose-200">Failed to calculate redistribution plan: ${err.message}</div>`;
                 showToast('Redistribution engine error', 'error');
             } finally {
                 if (btn) {
